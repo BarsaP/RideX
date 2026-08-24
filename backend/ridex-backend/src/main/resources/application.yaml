@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/ridex
     username: ridex
-    password: ridex_dev_password
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:

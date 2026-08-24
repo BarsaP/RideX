@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: ridex
       POSTGRES_USER: ridex
-      POSTGRES_PASSWORD: ridex_dev_password
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
