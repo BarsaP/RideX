@@ -1,3 +1,19 @@
 spring:
   application:
     name: ridex-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ridex
+    username: ridex
+    password: ridex_dev_password
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+
+server:
+  port: 8080

@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: ridex-postgres
+    environment:
+      POSTGRES_DB: ridex
+      POSTGRES_USER: ridex
+      POSTGRES_PASSWORD: ridex_dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

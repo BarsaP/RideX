@@ -1,0 +1,17 @@
+# Frontend dependencies and output
+frontend/node_modules/
+frontend/dist/
+
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+
+# Operating system files
+.DS_Store
+Thumbs.db
