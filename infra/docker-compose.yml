@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgis/postgis:16-3.4
     container_name: ridex-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ridex
       POSTGRES_USER: ridex
