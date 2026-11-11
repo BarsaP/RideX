@@ -4,6 +4,8 @@ import com.ridex.auth.dto.RequestOtpRequest;
 import com.ridex.auth.dto.RequestOtpResponse;
 import com.ridex.auth.dto.VerifyOtpRequest;
 import com.ridex.auth.dto.VerifyOtpResponse;
+import com.ridex.auth.jwt.RefreshTokenService;
+import com.ridex.user.User;
 import com.ridex.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +30,17 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final SecureRandom secureRandom = new SecureRandom();
-
+    private final RefreshTokenService refreshTokenService;
     public AuthService(
             OtpChallengeRepository otpChallengeRepository,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            RefreshTokenService refreshTokenService
     ){
         this.otpChallengeRepository = otpChallengeRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Transactional
@@ -120,7 +124,21 @@ public class AuthService {
         challenge.setVerifiedAt(now);
         otpChallengeRepository.save(challenge);
 
-        return new VerifyOtpResponse(true, "OTP verified successfully");
+        if(request.purpose() == OtpPurpose.LOGIN){
+            User user = userRepository.findByPhone(request.phone())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "No account exists for this phone number"
+                    ));
+
+            return new VerifyOtpResponse(
+                    true,
+                    "Login successful",
+                    refreshTokenService.issueTokens(user)
+            );
+        }
+
+        return new VerifyOtpResponse(true, "OTP verified successfully", null);
     }
 
     private void validatePurpose(String phone, OtpPurpose purpose){

@@ -34,8 +34,15 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserRole role;
+
     @PrePersist
     void onCreate(){
+        if(role == null){
+            role = UserRole.CUSTOMER;
+        }
         Instant now = Instant.now();
         id = UUID.randomUUID();
         status = "ACTIVE";
