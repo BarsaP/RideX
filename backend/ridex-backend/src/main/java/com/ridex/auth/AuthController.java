@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/auth/otp")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -28,7 +28,7 @@ public class AuthController {
         this.refreshTokenService = refreshTokenService;
     }
 
-    @PostMapping("/request")
+    @PostMapping("/otp/request")
     public ResponseEntity<RequestOtpResponse> requestOtp(
             @Valid @RequestBody RequestOtpRequest request
             ){
@@ -36,7 +36,7 @@ public class AuthController {
                 .body(authService.requestOtp(request));
     }
 
-    @PostMapping("/verify")
+    @PostMapping("/otp/verify")
     public ResponseEntity<VerifyOtpResponse> verifyOtp(
             @Valid @RequestBody VerifyOtpRequest request
             ){
